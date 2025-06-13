@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using EcoSphere.Domain;
 
-public class GrowPlantUseCase : MonoBehaviour
+namespace EcoSphere.UseCases
 {
-    // Start is called before the first frame update
-    void Start()
+    public class GrowPlantUseCase
     {
-        
-    }
+        private readonly Plant _plant;
+        private readonly Climate _climate;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public GrowPlantUseCase(Plant plant, Climate climate)
+        {
+            _plant = plant;
+            _climate = climate;
+        }
+
+        public void Tick(float deltaTime)
+        {
+            if (_climate.CurrentWeather == WeatherType.Sunny)
+                _plant.AccumulateGrowth(deltaTime * 1f);
+            else if (_climate.CurrentWeather == WeatherType.Rainy)
+                _plant.AccumulateGrowth(deltaTime * 0.75f);
+        }
+
+        public PlantStage GetCurrentStage()
+        {
+            return _plant.Stage;
+        }
+
+        public float GetGrowth()
+        {
+            return _plant.Growth;
+        }
     }
 }
