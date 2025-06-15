@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using EcoSphere.Domain;
+using EcoSphere.UseCases;
+using Zenject;
 
-public class PlantUI : MonoBehaviour
+namespace EcoSphere.UI
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PlantUI : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private TextMeshProUGUI plantStageText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [Inject] private GrowPlantUseCase _growPlantUseCase;
+
+        public void UpdatePlantUI()
+        {
+            PlantStage stage = _growPlantUseCase.GetCurrentStage();
+            plantStageText.text = $"Plant Stage: {stage}";
+        }
     }
 }
