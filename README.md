@@ -23,6 +23,8 @@ This project simulates environmental interactions such as dynamic weather and pl
 - Showcase code readability, testability, and performance-awareness
 - Modular enough to extend into other simulations or editors
 
+![coverage](badge-coverage.svg)
+
 ---
 
 > Built by [Ismael Bracho](https://github.com/tu-usuario), Unity Developer.

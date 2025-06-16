@@ -32,7 +32,7 @@ jobs:
             Library-
             
       
-      - name: Run EditMode tests
+      - name: Run EditMode tests + Code Coverage
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -42,7 +42,32 @@ jobs:
           unityVersion: 2022.3.25f1
           testMode: EditMode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          coverageOptions: |
+            enableCodeCoverage
+            generateHtmlReport
+            generateAdditionalMetrics
+          artifactsPath: ${{ github.workspace }}/CoverageResults
       
+      - name: Convert coverage to lcov
+        uses: danielpalme/ReportGenerator-GitHub-Action@5
+        with:
+          reports: ${{ github.workspace }}/CoverageResults/**/CoverageResults.json
+          targetdir: ${{ github.workspace }}/CoverageLCOV
+          reporttypes: 'LCOV'
+          
+      - name: Create/update coverage badge
+        uses: tj-actions/coverage-badge@v2
+        with:
+          coverage-summary: ${{ github.workspace }}/CoverageLCOV/lcov.info
+          output: badge-coverage.svg
+      
+      - name: Commit badge
+        uses: EndBug/add-and-commit@v9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add: 'badge-coverage.svg'
+          message: 'chore(ci): update coverage badge'
       
       - name: Build project (Windows)
         uses: game-ci/unity-builder@v4
