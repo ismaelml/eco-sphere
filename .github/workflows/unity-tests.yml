@@ -71,7 +71,7 @@ jobs:
           fi
 
           # === Calcular porcentaje ===
-          lines_total=$(grep -c "^DA:" "$FILE")
+          lines_total=$(grep "^DA:" "$FILE" | wc -l)
           if [ "$lines_total" -eq 0 ]; then
             echo "No DA: lines found in $FILE"; exit 1
           fi
