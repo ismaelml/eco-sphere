@@ -56,7 +56,7 @@ jobs:
           reporttypes: 'LCOV'
           
       - name: Create/update coverage badge
-        uses: tj-actions/coverage-badge@v2
+        uses: GoogleCloudPlatform/lcov-coverage-badge@v1
         with:
           coverage-summary: ${{ github.workspace }}/CoverageLCOV/lcov.info
           output: badge-coverage.svg
