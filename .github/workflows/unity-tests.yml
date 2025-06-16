@@ -58,7 +58,7 @@ jobs:
       - name: Convert coverage to lcov
         uses: danielpalme/ReportGenerator-GitHub-Action@5
         with:
-          reports: CoverageResults/**/opencover.xml
+          reports: CoverageResults/editmode-results.xml
           targetdir: CoverageLCOV
           reporttypes: 'LCOV'
           
