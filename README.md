@@ -1,4 +1,5 @@
 # EcoSphere 🌱  
+![coverage](badge-coverage.svg)
 *A modular environment logic system in Unity.*
 
 This project simulates environmental interactions such as dynamic weather and plant growth using Clean Architecture principles. It is designed for portfolio purposes to demonstrate code quality, separation of concerns, testing, and scalability.
@@ -23,7 +24,7 @@ This project simulates environmental interactions such as dynamic weather and pl
 - Showcase code readability, testability, and performance-awareness
 - Modular enough to extend into other simulations or editors
 
-![coverage](badge-coverage.svg)
+
 
 ---
 

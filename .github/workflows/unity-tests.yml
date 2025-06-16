@@ -74,8 +74,6 @@ jobs:
           rate=$(grep -o 'line-rate="[0-9.]\+"' "$XML" | head -n1 | cut -d'"' -f2)
           pct=$(awk "BEGIN {printf \"%d\", ($rate*100+0.5)}")   # redondeo
 
-          echo "Cobertura line-rate=$rate  →  pct=${pct}%"
-
           # === Color ===
           if   [ $pct -ge 90 ]; then color="brightgreen"
           elif [ $pct -ge 75 ]; then color="yellowgreen"
