@@ -55,17 +55,17 @@ jobs:
           echo "CoverageResults content ---"
           ls -R CoverageResults || true
       
-      - name: Convert coverage to lcov
+      - name: Convert coverage to lcov & cobertura
         uses: danielpalme/ReportGenerator-GitHub-Action@5
         with:
           reports: CoverageResults/editmode-results.xml
-          targetdir: CoverageLCOV
-          reporttypes: 'LCOV'
+          targetdir: CoverageReports
+          reporttypes: 'LCOV;Cobertura'
           
       - name: Install genbadge & create badge
         run: |
           python -m pip install --quiet genbadge[coverage]
-          genbadge coverage -i CoverageLCOV/lcov.info -o badge-coverage.svg
+          genbadge coverage -i CoverageReports/Cobertura.xml -o badge-coverage.svg
       
       - name: Commit badge
         uses: EndBug/add-and-commit@v9
