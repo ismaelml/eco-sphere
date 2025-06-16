@@ -65,30 +65,24 @@ jobs:
       - name: Generate coverage badge manually
         shell: bash
         run: |
-          FILE="CoverageReports/lcov.info"
-          if [ ! -f "$FILE" ]; then
-            echo "Coverage file $FILE not found"; exit 1
+          XML="CoverageReports/Cobertura.xml"
+          if [ ! -f "$XML" ]; then
+            echo "Coverage file $XML not found"; exit 1
           fi
 
-          # === Calcular porcentaje a partir de LF / LH ===
-          lines_total=$(awk -F':' '$1=="LF"{sum+=$2} END{print sum}' "$FILE")
-          lines_covered=$(awk -F':' '$1=="LH"{sum+=$2} END{print sum}' "$FILE")
+          # === Extraer line-rate (0-1) y calcular porcentaje ===
+          rate=$(grep -o 'line-rate="[0-9.]\+"' "$XML" | head -n1 | cut -d'"' -f2)
+          pct=$(awk "BEGIN {printf \"%d\", ($rate*100+0.5)}")   # redondeo
 
-          echo "DEBUG  ➜  LF=${lines_total}  LH=${lines_covered}"
+          echo "Cobertura line-rate=$rate  →  pct=${pct}%"
 
-          if [ -z "$lines_total" ] || [ "$lines_total" -eq 0 ]; then
-            echo "No LF lines found or total is zero"; exit 1
-          fi
-          pct=$(( 100 * lines_covered / lines_total ))
-          echo "DEBUG  ➜  pct=${pct}"
+          # === Color ===
+          if   [ $pct -ge 90 ]; then color="brightgreen"
+          elif [ $pct -ge 75 ]; then color="yellowgreen"
+          elif [ $pct -ge 50 ]; then color="yellow"
+          else                      color="red"; fi
 
-          # === Color semáforo ===
-          if   [ "$pct" -ge 90 ]; then color="brightgreen"
-          elif [ "$pct" -ge 75 ]; then color="yellowgreen"
-          elif [ "$pct" -ge 50 ]; then color="yellow"
-          else                        color="red"; fi
-
-          # === Descargar badge desde Shields.io ===
+          # === Descargar badge ===
           curl -sSf -o badge-coverage.svg \
             "https://img.shields.io/badge/Coverage-${pct}%25-${color}.svg"
 
