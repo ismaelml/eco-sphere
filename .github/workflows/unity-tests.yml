@@ -47,6 +47,13 @@ jobs:
             generateHtmlReport
             generateAdditionalMetrics
           artifactsPath: CoverageResults
+          
+      - name: List coverage output (debug)
+        run: |
+          echo "Workspace content --------"
+          ls -R
+          echo "CoverageResults content ---"
+          ls -R CoverageResults || true
       
       - name: Convert coverage to lcov
         uses: danielpalme/ReportGenerator-GitHub-Action@5
