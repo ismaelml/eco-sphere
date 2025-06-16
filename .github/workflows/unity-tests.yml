@@ -55,11 +55,10 @@ jobs:
           targetdir: ${{ github.workspace }}/CoverageLCOV
           reporttypes: 'LCOV'
           
-      - name: Create/update coverage badge
-        uses: threeal/coverage-badge-action@v1
-        with:
-          coverage-file: ${{ github.workspace }}/CoverageLCOV/lcov.info
-          output: badge-coverage.svg
+      - name: Install genbadge & create badge
+        run: |
+          python -m pip install --quiet genbadge[coverage]
+          genbadge coverage -i CoverageLCOV/lcov.info -o badge-coverage.svg
       
       - name: Commit badge
         uses: EndBug/add-and-commit@v9
