@@ -81,5 +81,18 @@ namespace EcoSphere.Tests.UseCases
             Assert.AreEqual(5f, _plant.Growth);
             Assert.AreEqual(PlantStage.Sprout, _plant.Stage);
         }
+        
+        [Test]
+        public void Getters_ShouldReturnCurrentValues()
+        {
+            _useCase.Tick(6f);
+            
+            var stage  = _useCase.GetCurrentStage();
+            var growth = _useCase.GetGrowth();
+
+            Assert.AreEqual(PlantStage.Sprout, stage);
+            Assert.AreEqual(6f, growth);
+        }
+
     }
 }
