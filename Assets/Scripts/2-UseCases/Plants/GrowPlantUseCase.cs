@@ -6,6 +6,9 @@ namespace EcoSphere.UseCases
     {
         private readonly Plant _plant;
         private readonly Climate _climate;
+        
+        private const float SunnyGrowthRate = 1f;
+        private const float RainyGrowthRate = 0.75f;
 
         public GrowPlantUseCase(Plant plant, Climate climate)
         {
@@ -16,9 +19,9 @@ namespace EcoSphere.UseCases
         public void Tick(float deltaTime)
         {
             if (_climate.CurrentWeather == WeatherType.Sunny)
-                _plant.AccumulateGrowth(deltaTime * 1f);
+                _plant.AccumulateGrowth(deltaTime * SunnyGrowthRate);
             else if (_climate.CurrentWeather == WeatherType.Rainy)
-                _plant.AccumulateGrowth(deltaTime * 0.75f);
+                _plant.AccumulateGrowth(deltaTime * RainyGrowthRate);
         }
 
         public PlantStage GetCurrentStage()

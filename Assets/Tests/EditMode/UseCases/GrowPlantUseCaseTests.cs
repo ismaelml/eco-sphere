@@ -1,4 +1,3 @@
-// Tests/EditMode/UseCases/GrowPlantUseCaseTests.cs
 using NUnit.Framework;
 using EcoSphere.Domain;
 using EcoSphere.UseCases;
@@ -55,6 +54,32 @@ namespace EcoSphere.Tests.UseCases
 
             Assert.AreEqual(PlantStage.Mature, _plant.Stage);
             Assert.GreaterOrEqual(_plant.Growth, 10f);
+        }
+
+        [Test]
+        public void Plant_Should_Transition_Through_All_Stages_WithAccumulatedTicks()
+        {
+            float[] tickIntervals = { 1f, 2f, 3f, 2f, 4f }; 
+            foreach (var delta in tickIntervals)
+            {
+                _useCase.Tick(delta);
+            }
+
+            Assert.AreEqual(PlantStage.Mature, _plant.Stage);
+            Assert.GreaterOrEqual(_plant.Growth, 10f);
+        }
+
+        [Test]
+        public void Plant_Growth_Should_Be_Affected_By_Changing_Weather()
+        {
+            _useCase.Tick(2f); // sunny
+            _climate.ChangeWeather(WeatherType.Rainy);
+            _useCase.Tick(4f); // 4 * 0.75 (RainyGrowthRate) = 3
+            _climate.ChangeWeather(WeatherType.Cloudy);
+            _useCase.Tick(3f); // 0
+
+            Assert.AreEqual(5f, _plant.Growth);
+            Assert.AreEqual(PlantStage.Sprout, _plant.Stage);
         }
     }
 }
