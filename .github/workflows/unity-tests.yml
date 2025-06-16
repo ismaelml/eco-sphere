@@ -65,20 +65,28 @@ jobs:
       - name: Generate coverage badge manually
         shell: bash
         run: |
-          # === Calcular porcentaje a partir de lcov.info ===
-          lines_total=$(grep -h "^DA:" CoverageReports/lcov.info | wc -l)
-          lines_covered=$(grep -h "^DA:" CoverageReports/lcov.info | awk -F',' '{if ($2>0) c++} END {print c}')
+          FILE="CoverageReports/lcov.info"
+          if [ ! -f "$FILE" ]; then
+            echo "Coverage file $FILE not found"; exit 1
+          fi
+
+          # === Calcular porcentaje ===
+          lines_total=$(grep -c "^DA:" "$FILE")
+          if [ "$lines_total" -eq 0 ]; then
+            echo "No DA: lines found in $FILE"; exit 1
+          fi
+          lines_covered=$(grep "^DA:" "$FILE" | awk -F',' '{if ($2>0) ++c} END{print c}')
           pct=$(( 100 * lines_covered / lines_total ))
           echo "Coverage: ${pct}%  (${lines_covered}/${lines_total})"
 
-          # === Elegir color según porcentaje ===
+          # === Color semáforo ===
           if   [ $pct -ge 90 ]; then color="brightgreen"
           elif [ $pct -ge 75 ]; then color="yellowgreen"
           elif [ $pct -ge 50 ]; then color="yellow"
           else                      color="red"; fi
 
-          # === Descargar badge SVG desde Shields.io ===
-          curl -s -o badge-coverage.svg \
+          # === Descargar badge desde Shields.io ===
+          curl -sSf -o badge-coverage.svg \
             "https://img.shields.io/badge/Coverage-${pct}%25-${color}.svg"
 
       - name: Commit badge
