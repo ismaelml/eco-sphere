@@ -56,7 +56,7 @@ jobs:
           reporttypes: 'LCOV'
           
       - name: Create/update coverage badge
-        uses: threeal/coverage-badge-action@v2
+        uses: threeal/coverage-badge-action@v1
         with:
           coverage-file: ${{ github.workspace }}/CoverageLCOV/lcov.info
           output: badge-coverage.svg
