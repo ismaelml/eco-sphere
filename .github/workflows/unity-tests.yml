@@ -70,12 +70,12 @@ jobs:
             echo "Coverage file $FILE not found"; exit 1
           fi
 
-          # === Calcular porcentaje ===
-          lines_total=$(grep "^DA:" "$FILE" | wc -l)
+          # === Calcular porcentaje a partir de LF / LH ===
+          lines_total=$(awk -F':' '/^LF:/{sum+=$2} END{print sum}' "$FILE")
+          lines_covered=$(awk -F':' '/^LH:/{sum+=$2} END{print sum}' "$FILE")
           if [ "$lines_total" -eq 0 ]; then
-            echo "No DA: lines found in $FILE"; exit 1
+            echo "No LF: lines found in $FILE"; exit 1
           fi
-          lines_covered=$(grep "^DA:" "$FILE" | awk -F',' '{if ($2>0) ++c} END{print c}')
           pct=$(( 100 * lines_covered / lines_total ))
           echo "Coverage: ${pct}%  (${lines_covered}/${lines_total})"
 
