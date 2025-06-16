@@ -62,18 +62,13 @@ jobs:
           targetdir: CoverageReports
           reporttypes: 'LCOV;Cobertura'
           
-      - name: Install genbadge & create badge
-        run: |
-          python -m pip install --quiet genbadge[coverage]
-          genbadge coverage -i CoverageReports/Cobertura.xml -o badge-coverage.svg
-      
-      - name: Commit badge
-        uses: EndBug/add-and-commit@v9
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create/update coverage badge
+        uses: nwtgck/actions-coverage-badges@v2
         with:
-          add: 'badge-coverage.svg'
-          message: 'chore(ci): update coverage badge'
+          lcov-path: CoverageReports/lcov.info
+          badge-path: badge-coverage.svg
+          commit-message: "chore(ci): update coverage badge"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Build project (Windows)
         uses: game-ci/unity-builder@v4
